@@ -1,75 +1,109 @@
-" Notes on autocomplete
-" - You need cmake for YouCompleteMe, and might need to go into where it is in
-"   .vim and run `python install.py --all`
-" - You need to `cargo install rusty-tags` and ctags for rust
-
-" Prevent vim from clearing the clipboard after closing
-autocmd VimLeave * call system("xsel -ib", getreg('+'))
-
-set mouse=a
-"set paste
-set nocompatible              " be iMproved, required
-set ruler
-set autoread
-filetype off                  " required
-set backspace=indent,eol,start
-
-" --- EXPERIMENTAL STUFF HERE
-"nnoremap <C-W>s Hmx`` \|:split<CR>`xzt``
-" --- DONE WITH EXPERIMENTAL STUFF
-
-set hlsearch
-"set wildmenu
-syntax on
-"set relativenumber
-set number
-
-"call plug#begin()
-"
-"Plug 'rust-lang/rust.vim'
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --all' }
-"Plug 'scrooloose/nerdtree'
-"Plug 'jistr/vim-nerdtree-tabs'
-"Plug 'chemzqm/vim-jsx-improve'
-"Plug 'sickill/vim-monokai'
-"Plug 'alvan/vim-closetag'
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-"Plug 'morhetz/gruvbox'
-"call plug#end()
-" autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;
-" autocmd BufWritePost *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
-
-let g:closetag_shortcut = '>'
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.erb,*.js,*.jsx,*.tsx"
-let g:airline#extensions#tabline#enabled = 1
+ " Basic config
 
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+set textwidth=80
+set formatoptions=croqt
+set autoindent
+set smartindent
+set mouse=a
+set ruler
+set autoread
+set backspace=indent,eol,start
+set hlsearch
+syntax on
+set number
+
+
+" Install plugins
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()          " required
+Plugin 'VundleVim/Vundle.vim'
+Plugin '907th/vim-auto-save'
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'kien/ctrlp.vim'
+"Plugin 'vim-syntastic/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'lervag/vimtex'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+execute pathogen#infect()
+call plug#begin()
+Plug 'lervag/vimtex'
+Plug 'sirver/ultisnips'
+Plug '907th/vim-auto-save'
+call plug#end()
+
+
+" Python whitespace config
+
+" au BufNewFile,BufRead *.py
+"     \ set tabstop=4
+"     \ set softtabstop=4
+"     \ set shiftwidth=4
+"     \ set textwidth=79
+"     \ set expandtab
+"     \ set autoindent
+"     \ set fileformat=unix
+
+
+" Fullstack whitespace config
+
+au BufNewFile,BufRead *.js, *.html, *.css
+    \ set tabstop=2
+    \ set softtabstop=2
+    \ set shiftwidth=2
+
+" AutoSave config
+
+let g:updatetime = 300
+let g:auto_save_events = ["InsertLeave", "TextChanged", "CursorHoldI"]
+
+
+" Vim Tex Config
+
+let g:tex_flavor='latex'
+let g:vimtex_view_method='skim'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
+set encoding=utf8
+if empty(v:servername) && exists('*remote_startserver')
+  call remote_startserver('VIM')
+endif
+
+
+" Formatting based on programming language
+
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype rust setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype haskell setlocal ts=2 sw=2 expandtab
 
-set autoindent
-set smartindent
 
+" NERDTree
 
-nnoremap <leader>b :ls<CR>:b 
-nnoremap <leader>gb :GoBuild<CR>
-nnoremap <leader>gi :GoImports<CR>
-nnoremap <leader>gf :GoFmt<CR>
-nnoremap <leader>w :w<CR>
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+" Automatically open NERDTree upon launch "
+autocmd vimenter * NERDTree
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * silent NERDTreeMirror
+" Move cursor to file instead of NERDTree  upon launching vim "
+autocmd VimEnter * NERDTree | wincmd p
+" Ignore files in NERDTree 
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
-nnoremap <C-p> :FZF<CR>
-
-let g:ycm_filetype_whitelist = { 'go': 1 }
-setlocal omnifunc=go#complete#Complete
-
-set textwidth=80
-set formatoptions=croqt
-
+" Prevent vim from clearing the clipboard after closing
 autocmd VimLeave * call system("xsel -ib", getreg('+'))
+
