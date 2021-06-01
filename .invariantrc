@@ -1,0 +1,29 @@
+# Git
+alias ga="git add"
+alias gc="git commit"
+alias gd="git diff"
+alias gb="git branch"
+alias gl="git log"
+alias gr="git remote"
+alias grv="git remote -v"
+alias grm="git rm"
+alias gmv="git mv"
+alias gs="git status"
+alias gpl="git pull"
+alias gph="git push"
+
+# Classes
+alias t408="cd ~/cs408"
+alias t352="cd ~/cs352"
+alias t422="cd ~/cs422"
+alias t217="cd ~/com217"
+
+# Python
+alias py=python
+alias py2=python2
+alias py3=python3
+
+# SSH 
+alias sdt="ssh mramli@data.cs.purdue.edu"
+alias mdt="mosh mramli@data.cs.purdue.edu"
+
