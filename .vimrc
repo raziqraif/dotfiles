@@ -41,6 +41,7 @@ call plug#begin()
 Plug 'lervag/vimtex'
 Plug 'sirver/ultisnips'
 Plug '907th/vim-auto-save'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 
@@ -69,40 +70,12 @@ let g:updatetime = 300
 let g:auto_save_events = ["InsertLeave", "TextChanged", "CursorHoldI"]
 
 
-" Vim Tex Config
-
-let g:tex_flavor='latex'
-let g:vimtex_view_method='skim'
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
-set encoding=utf8
-if empty(v:servername) && exists('*remote_startserver')
-  call remote_startserver('VIM')
-endif
-
-
 " Formatting based on programming language
 
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype rust setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype go setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd Filetype haskell setlocal ts=2 sw=2 expandtab
-
-
-" NERDTree
-
-" Exit Vim if NERDTree is the only window left.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
-" Automatically open NERDTree upon launch "
-autocmd vimenter * NERDTree
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * silent NERDTreeMirror
-" Move cursor to file instead of NERDTree  upon launching vim "
-autocmd VimEnter * NERDTree | wincmd p
-" Ignore files in NERDTree 
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 " Prevent vim from clearing the clipboard after closing
 autocmd VimLeave * call system("xsel -ib", getreg('+'))
